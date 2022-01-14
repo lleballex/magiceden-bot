@@ -69,7 +69,7 @@ class Parser:
                 logger.debug(f'Old: {item["title"].split()[-1]} - {item["mintAddress"]}'
                              f' - {item["escrowPubkey"]} - {item["price"]}')
 
-        return (True, items)
+        return (True, items[::-1])
 
     def get_text(self):
         text = f'{self.collection}\n\n'
