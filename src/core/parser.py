@@ -45,6 +45,10 @@ class Parser:
         return cls(model.collection, model.get_filters(), model.id)
 
     def parse(self, initial=False):
+        if len(self.checked_items) > 50:
+            logger.debug('update')
+            self.checked_items = self.checked_items[len(self.checked_items) - 30:len(self.checked_items)]
+
         params = (self._get_params(30) if initial else self.params)
         response = requests.get(f'{self.url}?q={params}')
 
