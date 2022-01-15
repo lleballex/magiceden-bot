@@ -67,7 +67,7 @@ class Parser:
                     'image': item['img'],
                     'url': f'https://magiceden.io/item-details/{item["mintAddress"]}',
                     'price': f'{item["price"]} SOL',
-                    'collection': item['collectionTitle']
+                    'title': item['title']
                 })
             else:
                 logger.debug(f'Old: {item["title"].split()[-1]} - {item["mintAddress"]}'

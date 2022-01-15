@@ -25,7 +25,7 @@ async def parsing():
                         await bot.send_message(user.user_id, f'Ой-ой... Что-то пошло не так - код {result[1]}')
                     else:
                         for item in result[1]:
-                            caption = f'{item["collection"]} - {item["price"]}\n{item["url"]}'
+                            caption = f'{item["title"]} - {item["price"]}\n{item["url"]}'
                             try:
                                 await bot.send_photo(user.user_id, item['image'], caption)
                             except (InvalidHTTPUrlContent, WrongFileIdentifier):
