@@ -20,6 +20,9 @@ async def parsing():
             for parser in PARSERS:
                 result = parser.parse()
 
+                if result[0] and not result[1]:
+                    continue
+
                 for user in User.select():
                     if not result[0]:
                         await bot.send_message(user.user_id, f'Ой-ой... Что-то пошло не так - код {result[1]}')

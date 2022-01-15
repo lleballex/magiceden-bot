@@ -32,7 +32,7 @@ class Parser:
 
         self.params = self._get_params()
 
-    def _get_params(self, limit=7):
+    def _get_params(self, limit=10):
         return dumps({
             '$match': {'collectionSymbol': self.collection, **self._filters},
             '$sort': {'createdAt': -1},
@@ -59,8 +59,7 @@ class Parser:
 
         for item in response.json()['results']:
             if not item['escrowPubkey'] in self.checked_items and item['price']:
-                logger.debug(f'New: {item["title"].split()[-1]} - {item["mintAddress"]}'
-                             f' - {item["escrowPubkey"]} - {item["price"]}')
+                logger.debug(f'New: {item["title"]} - {item["escrowPubkey"]} - {item["price"]}')
 
                 self.checked_items.append(item['escrowPubkey'])
                 items.append({
@@ -70,8 +69,7 @@ class Parser:
                     'title': item['title']
                 })
             else:
-                logger.debug(f'Old: {item["title"].split()[-1]} - {item["mintAddress"]}'
-                             f' - {item["escrowPubkey"]} - {item["price"]}')
+                logger.debug(f'Old: {item["title"]} - {item["escrowPubkey"]} - {item["price"]}')
 
         return (True, items[::-1])
 
