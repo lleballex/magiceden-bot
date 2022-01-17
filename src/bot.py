@@ -9,7 +9,7 @@ import traceback
 from pathlib import Path
 from loguru import logger
 from aiogram import executor
-from aiogram.utils.exceptions import InvalidHTTPUrlContent, WrongFileIdentifier
+from aiogram.utils.exceptions import InvalidHTTPUrlContent, WrongFileIdentifier, BotBlocked
 
 
 async def parsing():
@@ -24,15 +24,18 @@ async def parsing():
                     continue
 
                 for user in User.select():
-                    if not result[0]:
-                        await bot.send_message(user.user_id, f'Ой-ой... Что-то пошло не так - код {result[1]}')
-                    else:
-                        for item in result[1]:
-                            caption = f'{item["title"]} - {item["price"]}\n{item["url"]}'
-                            try:
-                                await bot.send_photo(user.user_id, item['image'], caption)
-                            except (InvalidHTTPUrlContent, WrongFileIdentifier):
-                                await bot.send_message(user.user_id, caption)
+                    try:
+                        if not result[0]:
+                            await bot.send_message(user.user_id, f'Ой-ой... Что-то пошло не так - код {result[1]}')
+                        else:
+                            for item in result[1]:
+                                caption = f'{item["title"]} - {item["price"]}\n{item["url"]}'
+                                try:
+                                    await bot.send_photo(user.user_id, item['image'], caption)
+                                except (InvalidHTTPUrlContent, WrongFileIdentifier):
+                                    await bot.send_message(user.user_id, caption)
+                    except BotBlocked:
+                        user.delete_instance()
         except:
             logger.error(traceback.format_exc())
 

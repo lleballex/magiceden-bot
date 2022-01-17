@@ -46,13 +46,15 @@ class Parser:
 
     def parse(self, initial=False):
         if len(self.checked_items) > 50:
-            logger.debug('update')
             self.checked_items = self.checked_items[len(self.checked_items) - 30:len(self.checked_items)]
 
         params = (self._get_params(30) if initial else self.params)
         response = requests.get(f'{self.url}?q={params}')
 
         if response.status_code != 200:
+            if response.status_code == 503:
+                logger.warning('503 status code')
+                return (True, [])
             return (False, response.status_code)
 
         items = []
